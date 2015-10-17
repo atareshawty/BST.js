@@ -6,8 +6,7 @@ Constructor defaults to an empty tree
 */
 function BST(headData) {
   if (!headData) {
-    console.log('You didn\'t give my any data! This won\'t work');
-    return;
+    return null;
   } else {
     this.head = new Node(headData);
   }
@@ -20,70 +19,71 @@ function Node(data) {
 }
 
 BST.prototype.inOrderPrint = function() {
-  if (this.head != null) {
-    var headStore = this.head;
-    this.head = this.head.left;
-    this.inOrderPrint();
-    console.log(headStore.data);
-    this.head = headStore.right;
-    this.inOrderPrint();
-    this.head = headStore;
-  }
+  inOrderPrint(this.head);
 };
+
+function inOrderPrint(head) {
+  if (head != null) {
+    inOrderPrint(head.left);
+    console.log(head.data);
+    inOrderPrint(head.right);
+  }
+}
 
 BST.prototype.preOrderPrint = function() {
-  if (this.head != null) {
-    var headStore = this.head;
-    console.log(this.head.data);
-    this.head = this.head.left;
-    this.preOrderPrint();
-    this.head = headStore.right;
-    this.preOrderPrint();
-    this.head = headStore;
-  }
+  preOrderPrint(this.head);
 };
+
+function preOrderPrint(head) {
+  if (head != null) {
+    console.log(head.data);
+    preOrderPrint(head.left);
+    preOrderPrint(head.right);
+  }
+}
 
 BST.prototype.postOrderPrint = function() {
-  if (this.head != null) {
-    var headStore = this.head;
-    this.head = this.head.left;
-    this.preOrderPrint();
-    this.head = headStore.right;
-    this.preOrderPrint();
-    this.head = headStore;
-    console.log(this.head.data);
-  }
+  postOrderPrint(this.head);
 };
 
+function postOrderPrint(head) {
+  if (head != null) {
+    postOrderPrint(head.left);
+    postOrderPrint(head.right);
+    console.log(head.data);
+  }
+}
+
 BST.prototype.insert = function(data) {
-  if (typeof this.head.data != typeof data) console.log('Will only accept the same data type we started with');
-  var headStore = this.head;
-  if (this.head.data >= data) {
-    if (this.head.left != null) {
-      this.head = this.head.left;
-      this.insert(data);
+  if (typeof this.head.data != typeof data) {
+    console.log('Will only accept the same data type we started with');
+    return;
+  }
+  insert(this.head, data);
+};
+
+function insert(head, data) {
+  if (head.data >= data) {
+    if (head.left) {
+      insert(head.left, data);
     } else {
-      this.head.left = new Node(data);
+      head.left = new Node(data);
     }
   } else {
-    if (this.head.right != null) {
-      this.head = this.head.right;
-      this.insert(data);
+    if (head.right) {
+      insert(head.right, data);
     } else {
-      this.head.right = new Node(data);
+      head.right = new Node(data);
     }
   }
-  this.head = headStore;
-};
+}
 
 BST.prototype.contains = function(data) {
   return contains(this.head, data);
 }
 
 function contains(head, data) {
-  if (head == null) {
-    return false;
-  }
+  if (head == null) return false;
   if (head.data === data) {
     return true;
   } else if (head.data > data) {
