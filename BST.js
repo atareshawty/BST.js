@@ -5,7 +5,7 @@ Constructor defaults to an empty tree
 
 */
 function BST(headData) {
-  if (typeof headData === 'undefined') {
+  if (!headData) {
     console.log('You didn\'t give my any data! This won\'t work');
     return;
   } else {
@@ -73,10 +73,24 @@ BST.prototype.insert = function(data) {
       this.head.right = new Node(data);
     }
   }
-
   this.head = headStore;
 };
 
+BST.prototype.contains = function(data) {
+  return contains(this.head, data);
+}
 
+function contains(head, data) {
+  if (head == null) {
+    return false;
+  }
+  if (head.data === data) {
+    return true;
+  } else if (head.data > data) {
+    return contains(head.left, data);
+  } else {
+    return contains(head.right, data);
+  }
+}
 
 module.exports = BST;
